@@ -14,6 +14,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     private Fragment homeFragment;
+    private Fragment statisticalFragment;
+    private Fragment settingsFragment;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -27,13 +29,13 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 case R.id.navigation_dashboard:
-
+                    initFragment(1);
                     return true;
                 case R.id.navigation_notifications:
 
                     return true;
                 case R.id.navigation_settings:
-
+                    initFragment(3);
                     return true;
 
             }
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         // 开启事务
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         // 隐藏所有Fragment
+        hideFragment(transaction);
         switch (index) {
             case 0:
                 if (homeFragment == null) {
@@ -56,8 +59,38 @@ public class MainActivity extends AppCompatActivity {
                     transaction.show(homeFragment);
                 }
                 break;
+            case 1:
+                if (statisticalFragment == null) {
+                    statisticalFragment = new StatiticalDataFragment();
+                    transaction.add(R.id.fl_content, statisticalFragment);
+                } else {
+                    transaction.show(statisticalFragment);
+                }
+                break;
+            case 3:
+                if (settingsFragment == null) {
+                    settingsFragment = new SettingsFragment();
+                    transaction.add(R.id.fl_content, settingsFragment);
+                } else {
+                    transaction.show(settingsFragment);
+                }
+                break;
+
         }// 提交事务
         transaction.commit();
+
+    }
+
+    private void hideFragment(FragmentTransaction transaction) {
+        if (homeFragment != null) {
+            transaction.hide(homeFragment);
+        }
+        if (statisticalFragment != null) {
+            transaction.hide(statisticalFragment);
+        }
+        if (settingsFragment != null) {
+            transaction.hide(settingsFragment);
+        }
 
     }
 
@@ -66,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
+       // mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         initFragment(0);
